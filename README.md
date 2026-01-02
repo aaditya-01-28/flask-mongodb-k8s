@@ -249,8 +249,9 @@ Chosen because:
 
 * Simple local access in Minikube
 
-**Alternative**: Ingress
-**Rejected**: Overkill for local setup
+**Alternative:** Ingress
+
+**Rejected:** Overkill for local setup
 
 **Secrets for Credentials**
 Chosen because:
