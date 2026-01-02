@@ -295,13 +295,13 @@ Observed:
 <img width="1619" height="977" alt="pods-before-load" src="https://github.com/user-attachments/assets/d0c18628-306b-4a2b-be8f-fa5257f56cb0" />
 
 ### HPA During High Load
-<img width="1489" height="748" alt="hpa-during-load" src="https://github.com/user-attachments/assets/728bbed5-7fc6-480e-a33f-da2df666290b" />
+<img width="1861" height="1043" alt="hpa-during-load" src="https://github.com/user-attachments/assets/f4ef7b95-6752-4762-b08b-a137cf0b4c4d" />
 
 ### Pods After Scale-Up
-<img width="1572" height="941" alt="pods-after-scale-up" src="https://github.com/user-attachments/assets/36636912-f208-456a-b942-822c4a04d909" />
+<img width="1919" height="1079" alt="pods-after-scale-up" src="https://github.com/user-attachments/assets/2c77aa81-990b-4a39-9b8a-5f324e819369" />
 
 ### Pods Scale Down
-<img width="1729" height="1043" alt="pods-scale-down" src="https://github.com/user-attachments/assets/9beea7bf-8b34-4c68-89fa-eba82c3f1299" />
+<img width="1908" height="1079" alt="pods-scale-down" src="https://github.com/user-attachments/assets/07aab023-f7cd-47b7-9020-61775dc8c266" />
 
 ## Issues Encountered & Resolutions
 
