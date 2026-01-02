@@ -233,10 +233,10 @@ Flask replicas increase when CPU usage exceeds 70%.
 
 ## Issues Encountered & Resolutions
 
-**Issue	                    Resolution**
-1. CrashLoopBackOff	        Fixed Flask __name__ == "__main__"
-2. MongoDB auth failure	    Added authSource=admin
-3. Service not reachable	Used NodePort IP instead of tunnel
+**Issue**	                    **Resolution**
+CrashLoopBackOff	        Fixed Flask __name__ == "__main__"
+MongoDB auth failure	    Added authSource=admin
+Service not reachable	Used NodePort IP instead of tunnel
 
 ## Conclusion
 
