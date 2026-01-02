@@ -222,29 +222,29 @@ Limits:   0.5 CPU, 500Mi memory
 * Enables accurate autoscaling
 
 ## Design Choices and Alternatives
-**MongoDB as StatefulSet**
+**MongoDB as StatefulSet** 
 Chosen because:
 
 * Requires stable identity
 * Needs persistent storage
-**Alternative**: Deployment
-**Rejected**: Data loss risk, no stable identity
+**Alternative:** Deployment
+**Rejected:** Data loss risk, no stable identity
 
-**Flask as Deployment**
+**Flask as Deployment** 
 Chosen because:
 
 * Stateless application
 * Easy horizontal scaling
 
-**ClusterIP for MongoDB**
+**ClusterIP for MongoDB** 
 Chosen because:
 
 * Database should not be exposed externally
 
-**Alternative**: NodePort
-**Rejected**: Security risk
+**Alternative:** NodePort
+**Rejected:** Security risk
 
-**NodePort for Flask**
+**NodePort for Flask** 
 Chosen because:
 
 * Simple local access in Minikube
@@ -253,7 +253,7 @@ Chosen because:
 
 **Rejected:** Overkill for local setup
 
-**Secrets for Credentials**
+**Secrets for Credentials** 
 Chosen because:
 
 * Secure storage
@@ -286,6 +286,22 @@ Observed:
 * Flask replicas scaled from 2 → 4
 * Scaled back down after load stopped
 
+## Autoscaling Results (HPA)
+
+### HPA Before Load
+<img width="1818" height="985" alt="hpa-before-load" src="https://github.com/user-attachments/assets/c2a95260-1cab-4406-88f6-10650f6b9d18" />
+
+### Pods Before Load
+<img width="1619" height="977" alt="pods-before-load" src="https://github.com/user-attachments/assets/d0c18628-306b-4a2b-be8f-fa5257f56cb0" />
+
+### HPA During High Load
+<img width="1489" height="748" alt="hpa-during-load" src="https://github.com/user-attachments/assets/728bbed5-7fc6-480e-a33f-da2df666290b" />
+
+### Pods After Scale-Up
+<img width="1572" height="941" alt="pods-after-scale-up" src="https://github.com/user-attachments/assets/36636912-f208-456a-b942-822c4a04d909" />
+
+### Pods Scale Down
+<img width="1729" height="1043" alt="pods-scale-down" src="https://github.com/user-attachments/assets/9beea7bf-8b34-4c68-89fa-eba82c3f1299" />
 
 ## Issues Encountered & Resolutions
 
