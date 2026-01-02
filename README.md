@@ -175,60 +175,115 @@ mongodb://admin:password@mongo-service:27017/flask_db?authSource=admin
 * MongoDB authentication database is admin
 * Communication happens entirely inside the cluster
 
-## DNS Resolution in Kubernetes
+## DNS Resolution in Kubernetes (Explanation)
 
-* Kubernetes provides an internal DNS service (CoreDNS)
-* Each Service gets a DNS name
-* Flask connects to MongoDB using the service name mongo-service
-* DNS resolves this name to the MongoDB pod IP dynamically
-* No hardcoded IPs are used
+Kubernetes provides an internal DNS service (CoreDNS).
+Every Service automatically receives a DNS name.
 
-## Resource Requests and Limits
+In this project:
+* MongoDB Service name: mongo-service
+* Flask uses this name in the MongoDB URI
+```bash
+mongodb://admin:password@mongo-service:27017/flask_db
+```
 
-Both Flask and MongoDB pods define:
+When Flask attempts to connect:
 
-* Requests: Guaranteed minimum resources
-* Limits: Maximum allowed usage
+1. DNS resolves mongo-service
+2. CoreDNS maps it to the MongoDB pod IP
+3. Traffic is routed internally within the cluster
 
-Example:
+This avoids:
+
+* Hardcoded IPs
+* External exposure of the database
+
+## Resource Requests and Limits 
+**Requests**
+
+* Guaranteed minimum resources
+* Used by Kubernetes scheduler
+
+**Limits**
+
+* Maximum allowed usage
+* Prevents a pod from exhausting node resources
+
+**Example Used**
 ```bash
 Requests: 0.2 CPU, 250Mi memory
 Limits:   0.5 CPU, 500Mi memory
 ```
 
-This ensures:
+**Benefits:**
 
-* Stable scheduling
-* Fair resource usage
-* Proper autoscaling behavior
+* Stable performance
+* Efficient scheduling
+* Enables accurate autoscaling
 
-## Autoscaling Test (Cookie Point)
+## Design Choices and Alternatives
+**MongoDB as StatefulSet**
+Chosen because:
 
-To simulate load:
+* Requires stable identity
+* Needs persistent storage
+**Alternative**: Deployment
+**Rejected**: Data loss risk, no stable identity
+
+**Flask as Deployment**
+Chosen because:
+
+* Stateless application
+* Easy horizontal scaling
+
+**ClusterIP for MongoDB**
+Chosen because:
+
+* Database should not be exposed externally
+
+**Alternative**: NodePort
+**Rejected**: Security risk
+
+**NodePort for Flask**
+Chosen because:
+
+* Simple local access in Minikube
+
+**Alternative**: Ingress
+**Rejected**: Overkill for local setup
+
+**Secrets for Credentials**
+Chosen because:
+
+* Secure storage
+* Avoids hardcoding credentials
+
+## Cookie Point – Testing Scenarios
+Database Testing
+```bash
+curl -X POST -H "Content-Type: application/json" \
+-d '{"name":"test","value":1}' http://<node-ip>:<port>/data
+
+curl http://<node-ip>:<port>/data
+```
+
+Data persisted even after MongoDB pod restart, confirming PVC works.
+
+**Autoscaling Testing**
 ```bash
 kubectl run load-generator --image=busybox -- sh
 ```
 
-Inside the pod:
+Inside pod:
 ```bash
 while true; do wget -q -O- http://flask-service:5000; done
 ```
 
-Observe scaling:
-```bash
-kubectl get hpa
-kubectl get pods
-```
-Flask replicas increase when CPU usage exceeds 70%.
+Observed:
 
-## Design Choices
-
-* **StatefulSet for MongoDB**: Required for stable identity and storage
-* **Deployment for Flask:** Stateless application, easy scaling
-* **ClusterIP for MongoDB:** Database should not be exposed externally
-* **NodePort for Flask:** Simple local access in Minikube
-* **Secrets for credentials:** Avoid hardcoding sensitive data
-* **PVC for MongoDB:** Ensures data persistence across restarts
+* CPU usage crossed 70%
+* Flask replicas scaled from 2 → 4
+* Scaled back down after load stopped
 
 
 ## Issues Encountered & Resolutions
